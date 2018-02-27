@@ -1,0 +1,78 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: Ansible microservice
+    url: https://virtserver.swaggerhub.com/Brian-Williams/microansible/1.0.0
+info:
+  description: Microservice api for ansible
+  version: "1.0.0"
+  title: Ansible API
+  contact:
+    email: briancmwilliams@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /playbook:
+    post:
+      summary: run a playbook
+      description: |
+        Run a playbook with relevant options similar to ansible-playbook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaybookInput'
+        description: Playbook to run with options
+      responses:
+        '200':
+          description: play execution
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/PlaybookResult'
+
+components:
+  schemas:
+    PlaybookResult:
+      type: object
+      required:
+        - stdout_lines
+        - stderr_lines
+        - rc
+      properties:
+        stdout_lines:
+          type: array
+          items:
+            type: string
+            example: 'line1'
+          description: lines of stdout
+          example: ['line1', 'line2']
+        stderr_lines:
+          type: array
+          items:
+            type: string
+            example: "ERROR! the playbook: yo.yml could not be found"
+          description: lines of stderr
+          example: ["ERROR! the playbook: yo.yml could not be found"]
+        rc:
+          type: integer
+          description: return code of playbook
+          example: 0
+    PlaybookInput:
+      type: object
+      required:
+        - playbook
+      properties:
+        playbook:
+          type: string
+          description: playbook to run
+          example: playbook.yml
+        limit:
+          type: string
+          description: further limit selected hosts to an additional pattern
+          example: 'group&subgroup'
+        extra-vars:
+          type: string
+          description: set additional variables as key=value
+          example: 'foo=bar foo2=bar2'
