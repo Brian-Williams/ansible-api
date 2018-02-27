@@ -1,0 +1,92 @@
+---
+swagger: "2.0"
+info:
+  description: "Microservice api for ansible"
+  version: "1.0.0"
+  title: "Ansible API"
+  contact:
+    email: "briancmwilliams@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "virtserver.swaggerhub.com"
+basePath: "/Brian-Williams/microansible/1.0.0"
+schemes:
+- "https"
+paths:
+  /playbook:
+    post:
+      summary: "run a playbook"
+      description: "Run a playbook with relevant options similar to ansible-playbook\n"
+      operationId: "playbook_post"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Playbook to run with options"
+        required: false
+        schema:
+          $ref: "#/definitions/PlaybookInput"
+      responses:
+        200:
+          description: "play execution"
+          schema:
+            $ref: "#/definitions/PlaybookResult"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+definitions:
+  PlaybookResult:
+    type: "object"
+    required:
+    - "rc"
+    - "stderr_lines"
+    - "stdout_lines"
+    properties:
+      stdout_lines:
+        type: "array"
+        example:
+        - "line1"
+        - "line2"
+        description: "lines of stdout"
+        items:
+          type: "string"
+          example: "line1"
+      stderr_lines:
+        type: "array"
+        example:
+        - "ERROR! the playbook: yo.yml could not be found"
+        description: "lines of stderr"
+        items:
+          type: "string"
+          example: "ERROR! the playbook: yo.yml could not be found"
+      rc:
+        type: "integer"
+        example: 0
+        description: "return code of playbook"
+    example:
+      rc: 0
+      stderr_lines:
+      - "ERROR! the playbook: yo.yml could not be found"
+      stdout_lines:
+      - "line1"
+      - "line2"
+  PlaybookInput:
+    type: "object"
+    required:
+    - "playbook"
+    properties:
+      playbook:
+        type: "string"
+        example: "playbook.yml"
+        description: "playbook to run"
+      limit:
+        type: "string"
+        example: "group&subgroup"
+        description: "further limit selected hosts to an additional pattern"
+      extra-vars:
+        type: "string"
+        example: "foo=bar foo2=bar2"
+        description: "set additional variables as key=value"
+    example:
+      limit: "group&subgroup"
+      extra-vars: "foo=bar foo2=bar2"
+      playbook: "playbook.yml"
+x-components: {}
