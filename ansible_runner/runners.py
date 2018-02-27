@@ -15,8 +15,8 @@ def get_playbook_shell(playbook: str, *, limit: str=None, extra_vars: str=None) 
     return ['ansible-playbook'] + parameters + [playbook]
 
 
-def run_playbook(playbook, *args, **kwargs) -> CompletedProcess:
+def run_playbook(playbook, *args, _cwd="/etc/ansible/", **kwargs) -> CompletedProcess:
     """Run a playbook and return a completed process"""
     execution_opts = get_playbook_shell(playbook, *args, **kwargs)
-    cp = run(execution_opts, cwd="/etc/ansible/", stdout=PIPE, stderr=PIPE)
+    cp = run(execution_opts, cwd=_cwd, stdout=PIPE, stderr=PIPE)
     return cp

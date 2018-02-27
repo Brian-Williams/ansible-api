@@ -17,5 +17,6 @@ def test_command_construction():
 
 
 def test_arg_passed_correctly():
-    cp = run_playbook(**fake_play_inputs)
+    # set cwd as None for testing outside container
+    cp = run_playbook(**fake_play_inputs, _cwd=None)
     assert cp.args == fake_inputs_injested
