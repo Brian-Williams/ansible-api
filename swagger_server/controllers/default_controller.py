@@ -19,4 +19,4 @@ def playbook_post(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = PlaybookInput.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return body

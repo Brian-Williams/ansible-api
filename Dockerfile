@@ -5,7 +5,9 @@ WORKDIR /usr/src/app
 
 COPY requirements.txt /usr/src/app/
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN apk add --update --virtual .builddeps python3-dev libffi-dev openssl-dev build-base && \
+    pip3 install --no-cache-dir -r requirements.txt && \
+    apk del .builddeps
 
 COPY . /usr/src/app
 
